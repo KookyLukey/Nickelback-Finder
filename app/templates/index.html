@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Search</h1>
+    <form action="/index" method="POST" novalidate>
+        {{ form.hidden_tag() }}
+        <p>
+            {{ form.searchPhrase.label }}<br>
+            {{ form.searchPhrase(size=32) }}
+            {% for error in form.searchPhrase.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>{{ form.submit() }}</p>
+    </form>
+
+    <!--{% for song in songs %}
+    <div><p><b>{{ song.song_name }}:</b> {{ song.lyrics }}</p></div>
+    {% endfor %} -->
+{% endblock %}
