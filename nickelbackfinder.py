@@ -21,17 +21,21 @@ def get_all_songs(input_phrase):
     lyrics = Lyrics.query.all()
 
     for ly in lyrics:
+        song_weight = 0
         word_count = word_freq(ly.lyrics.lower())
         word_count_values = word_count.values()
 
-        compared[ly.song_name] = list(set(compare_input_to_songs(input_phrase)) & set(word_count_values))
+        #Inner join on the two lists then count up all of the occurences of the words
+        compared[ly.song_name] = list(set(get_synonyms(input_phrase)) & set(word_count_values))
+        for song in compared.get(ly.song_name):
+             song_weight = song_weight + word_count.keys()[word_count.values().index(song)]
 
-        master_songs[ly.song_name] = len(compared[ly.song_name])
+        master_songs[ly.song_name] = song_weight
 
     print(master_songs, file=sys.stderr)
     return master_songs
 
-def compare_input_to_songs(input_phrase):
+def get_synonyms(input_phrase):
     synonyms = []
     nltk.data.path.append('./nltk_data/')
 
