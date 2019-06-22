@@ -7,11 +7,11 @@ import nickelbackfinder
 @app.route('/index', methods=['GET', 'POST'])
 def index():
     form = SearchForm()
-    nickelbackfinder.get_all_songs()
+
     if form.validate_on_submit():
         flash('Searching {}'.format(form.searchPhrase.data))
         session['input_search'] = form.searchPhrase.data
-        nickelbackfinder.compare_input_to_songs(form.searchPhrase.data)
+        nickelbackfinder.get_all_songs(form.searchPhrase.data)
         return redirect(url_for('results'))
     return render_template('index.html', title='Search', form=form)
 
