@@ -10,12 +10,11 @@ def index():
 
     if form.validate_on_submit():
         flash('Searching {}'.format(form.searchPhrase.data))
-        session['input_search'] = form.searchPhrase.data
-        nickelbackfinder.get_all_songs(form.searchPhrase.data)
+        session['song_match'] = nickelbackfinder.get_all_songs(form.searchPhrase.data)
         return redirect(url_for('results'))
     return render_template('index.html', title='Search', form=form)
 
 @app.route('/results', methods=['GET', 'POST'])
 def results():
-    str_search = session.get('input_search', None)
+    str_search = session.get('song_match', None)
     return render_template('results.html', title='Results', testval=str_search)

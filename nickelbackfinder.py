@@ -5,6 +5,7 @@ import sys
 from app.models import Lyrics
 import nltk
 from nltk.corpus import wordnet
+import operator
 
 def word_freq(lyric):
 
@@ -12,6 +13,8 @@ def word_freq(lyric):
     wordlist = wordParse.removeStopwords(fullwordlist, wordParse.stopwords)
     dictionary = wordParse.wordListToFreqDict(wordlist)
     sorteddict = wordParse.sortFreqDict(dictionary)
+
+    sorteddict = [(t[1], t[0]) for t in sorteddict]
 
     return dict(sorteddict)
 
@@ -23,17 +26,19 @@ def get_all_songs(input_phrase):
     for ly in lyrics:
         song_weight = 0
         word_count = word_freq(ly.lyrics.lower())
-        word_count_values = word_count.values()
+        word_count_keys = word_count.keys()
+
+        synonyms = get_synonyms(input_phrase)
+        synonyms = synonyms + [input_phrase]
 
         #Inner join on the two lists then count up all of the occurences of the words
-        compared[ly.song_name] = list(set(get_synonyms(input_phrase)) & set(word_count_values))
+        compared[ly.song_name] = list(set(synonyms) & set(word_count_keys))
         for song in compared.get(ly.song_name):
-             song_weight = song_weight + word_count.keys()[word_count.values().index(song)]
+             song_weight = song_weight + word_count.get(song)
 
         master_songs[ly.song_name] = song_weight
 
-    print(master_songs, file=sys.stderr)
-    return master_songs
+    return get_highest_song(master_songs)
 
 def get_synonyms(input_phrase):
     synonyms = []
@@ -44,3 +49,6 @@ def get_synonyms(input_phrase):
     		synonyms.append(l.name())
 
     return synonyms
+
+def get_highest_song(all_songs):
+    return max(all_songs.items(), key=operator.itemgetter(1))[0]
