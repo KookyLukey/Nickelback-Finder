@@ -1,3 +1,5 @@
+from nltk.stem.wordnet import WordNetLemmatizer
+
 stopwords = ['a', 'about', 'above', 'across', 'after', 'afterwards']
 stopwords += ['again', 'against', 'all', 'almost', 'alone', 'along']
 stopwords += ['already', 'also', 'although', 'always', 'am', 'among']
@@ -78,3 +80,44 @@ def sortFreqDict(freqdict):
 
 def removeStopwords(wordlist, stopwords):
     return [w for w in wordlist if w not in stopwords]
+
+# Given a word, get the plural of it
+def getPlural(word):
+    if word.endswith('fe'):
+        # knife -> knives
+        return word[:-2] + 'ves'
+    elif word.endswith('f'):
+        # wolf -> wolves
+        return word[:-1] + 'ves'
+    elif word.endswith('o'):
+        # potato -> potatoes
+        return word + 'es'
+    elif word.endswith('us'):
+        # cactus -> cacti
+        return word[:-2] + 'i'
+    elif word.endswith('on'):
+        # criterion -> criteria
+        return word[:-2] + 'a'
+    elif word.endswith('y'):
+        # community -> communities
+        return word[:-1] + 'ies'
+    elif word[-1] in 'sx' or word[-2:] in ['sh', 'ch']:
+        return word + 'es'
+    elif word.endswith('an'):
+        return word[:-2] + 'en'
+    else:
+        return word + 's'
+
+# Given a word return either the past or present version of it
+def getPastPresent(word):
+        if word.endswith('ed'):
+            # wolf -> wolves
+            return word[:-2]
+        elif word.endswith('d'):
+            # knife -> knives
+            return word[:-1]
+        elif word.endswith('e'):
+            # bake -> baked
+            return word + 'd'
+        else:
+            return word + 'ed'
