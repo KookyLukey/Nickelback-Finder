@@ -1,17 +1,16 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1>Search</h1>
+    <h1>Type in a feeling. Get a corresponding Nickelback Song.</h1>
     <form action="/index" method="POST" novalidate>
         {{ form.hidden_tag() }}
         <p>
-            {{ form.searchPhrase.label }}<br>
             {{ form.searchPhrase(size=32) }}
             {% for error in form.searchPhrase.errors %}
             <span style="color: red;">[{{ error }}]</span>
             {% endfor %}
         </p>
-        <p>{{ form.submit() }}</p>
+        <p>{{ form.submit }}</p>
     </form>
 
     <!--{% for song in songs %}
