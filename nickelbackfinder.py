@@ -51,10 +51,11 @@ def get_all_songs(input_phrase):
 
         #Inner join on the two lists then count up all of the occurences of the words
         compared[ly.song_name] = list(set(synonyms) & set(word_count_keys))
+        print(compared[ly.song_name])
         for song in compared.get(ly.song_name):
              song_weight = song_weight + word_count.get(song)
 
         master_songs[ly.song_name] = song_weight
+        print(master_songs)
 
-    print(master_songs)
     return get_highest_song(master_songs)
