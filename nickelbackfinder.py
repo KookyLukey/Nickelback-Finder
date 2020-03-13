@@ -28,7 +28,7 @@ def get_synonyms(input_phrase):
 
     return synonyms
 
-def get_highest_song(all_songs):
+def get_highest_songs(all_songs):
     # Takes in a dictionary and returns the highest song depending on the weight
     return max(all_songs.items(), key=operator.itemgetter(1))[0]
 
@@ -56,6 +56,9 @@ def get_all_songs(input_phrase):
              song_weight = song_weight + word_count.get(song)
 
         master_songs[ly.song_name] = song_weight
-        print(master_songs)
 
-    return get_highest_song(master_songs)
+    #If all song weights are zero print this
+    if all(value == 0 for value in master_songs.values()):
+        master_songs["Unfortunately your input did not match any songs."] = 99
+
+    return get_highest_songs(master_songs)
