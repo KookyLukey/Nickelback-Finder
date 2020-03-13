@@ -9,7 +9,6 @@ def index():
     form = SearchForm()
 
     if form.validate_on_submit():
-        flash('Searching {}'.format(form.searchPhrase.data))
         session['song_match'] = nickelbackfinder.get_all_songs(form.searchPhrase.data)
         return redirect(url_for('results'))
     return render_template('index.html', title='Search', form=form)

@@ -29,8 +29,17 @@ def get_synonyms(input_phrase):
     return synonyms
 
 def get_highest_songs(all_songs):
-    # Takes in a dictionary and returns the highest song depending on the weight
-    return max(all_songs.items(), key=operator.itemgetter(1))[0]
+    # Takes in a dictionary and returns the highest three songs depending on the weight
+    top_3 = sorted(all_songs, key=all_songs.get, reverse=True)[:3]
+
+    i = 0
+    while i < len(top_3):
+        if all_songs.get(top_3[i]) <= 0:
+            del top_3[i]
+        else:
+            i += 1
+
+    return ', '.join(top_3)
 
 #
 # Main method called from routes
